@@ -7,7 +7,21 @@ const PRIORITY_COLORS = {
   HIGH: "#eb3b5a",
 };
 
+function formatDueDate(dueDate) {
+  // dueDate is "YYYY-MM-DD" from the backend
+  const [year, month, day] = dueDate.split("-").map(Number);
+  const due = new Date(year, month - 1, day);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const isOverdue = due < today;
+  const label = due.toLocaleDateString(undefined, { month: "short", day: "numeric" });
+  return { label, isOverdue };
+}
+
 export default function TaskCard({ task, index, onDelete }) {
+  const dueInfo = task.dueDate ? formatDueDate(task.dueDate) : null;
+
   return (
     <Draggable draggableId={String(task.id)} index={index}>
       {(provided, snapshot) => (
@@ -33,6 +47,12 @@ export default function TaskCard({ task, index, onDelete }) {
             </button>
           </div>
           {task.description && <p className="task-description">{task.description}</p>}
+          {dueInfo && (
+            <span className={`due-badge ${dueInfo.isOverdue ? "due-overdue" : ""}`}>
+              {dueInfo.isOverdue ? "Overdue: " : "Due "}
+              {dueInfo.label}
+            </span>
+          )}
         </div>
       )}
     </Draggable>

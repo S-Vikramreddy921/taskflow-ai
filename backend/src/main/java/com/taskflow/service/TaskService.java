@@ -39,6 +39,7 @@ public class TaskService {
         task.setPriority(request.getPriority());
         task.setColumn(column);
         task.setPosition(position);
+        task.setDueDate(request.getDueDate());
 
         return taskRepository.save(task);
     }
@@ -51,6 +52,7 @@ public class TaskService {
         task.setTitle(request.getTitle());
         task.setDescription(request.getDescription());
         task.setPriority(request.getPriority());
+        task.setDueDate(request.getDueDate());
 
         return taskRepository.save(task);
     }
@@ -75,5 +77,14 @@ public class TaskService {
             throw new NoSuchElementException("Task not found: " + taskId);
         }
         taskRepository.deleteById(taskId);
+    }
+
+    /** Deletes every task currently in the given column. Used for "Clear Done tasks". */
+    @Transactional
+    public void clearColumn(Long columnId) {
+        if (!columnRepository.existsById(columnId)) {
+            throw new NoSuchElementException("Column not found: " + columnId);
+        }
+        taskRepository.deleteByColumnId(columnId);
     }
 }

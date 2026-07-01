@@ -53,6 +53,13 @@ export default function Board({ board, setBoard }) {
     setBoard({ ...board, columns: newColumns });
   };
 
+  const handleColumnCleared = (columnId) => {
+    const newColumns = board.columns.map((col) =>
+      col.id === columnId ? { ...col, tasks: [] } : col
+    );
+    setBoard({ ...board, columns: newColumns });
+  };
+
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
       <div className="board">
@@ -65,6 +72,7 @@ export default function Board({ board, setBoard }) {
               column={column}
               onTaskCreated={handleTaskCreated}
               onTaskDeleted={handleTaskDeleted}
+              onColumnCleared={handleColumnCleared}
             />
           ))}
       </div>

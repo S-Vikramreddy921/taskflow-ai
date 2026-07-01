@@ -5,6 +5,7 @@ export default function AddTaskModal({ columnId, columnName, onClose, onCreated 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [priority, setPriority] = useState("MEDIUM");
+  const [dueDate, setDueDate] = useState("");
   const [aiLoading, setAiLoading] = useState(false);
   const [aiError, setAiError] = useState(null);
 
@@ -28,7 +29,13 @@ export default function AddTaskModal({ columnId, columnName, onClose, onCreated 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!title.trim()) return;
-    const task = await api.createTask({ title, description, priority, columnId });
+    const task = await api.createTask({
+      title,
+      description,
+      priority,
+      columnId,
+      dueDate: dueDate || null,
+    });
     onCreated(task);
   };
 
@@ -70,6 +77,13 @@ export default function AddTaskModal({ columnId, columnName, onClose, onCreated 
             <option value="MEDIUM">Medium</option>
             <option value="HIGH">High</option>
           </select>
+
+          <label>Due date (optional)</label>
+          <input
+            type="date"
+            value={dueDate}
+            onChange={(e) => setDueDate(e.target.value)}
+          />
 
           <div className="modal-actions">
             <button type="button" onClick={onClose} className="secondary-btn">

@@ -19,6 +19,8 @@ export const api = {
 
   deleteTask: (id) => client.delete(`/tasks/${id}`),
 
+  clearColumn: (columnId) => client.delete(`/columns/${columnId}/tasks`),
+
   suggestTask: (title, context) =>
     client.post("/ai/suggest", { title, context }).then((r) => r.data),
 };

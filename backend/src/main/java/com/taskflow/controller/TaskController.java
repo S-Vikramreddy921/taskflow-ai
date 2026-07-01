@@ -43,4 +43,11 @@ public class TaskController {
         taskService.deleteTask(id);
         return ResponseEntity.noContent().build();
     }
+
+    /** Deletes every task in a column in one shot, e.g. "Clear Done tasks". */
+    @DeleteMapping("/columns/{columnId}/tasks")
+    public ResponseEntity<Void> clearColumn(@PathVariable Long columnId) {
+        taskService.clearColumn(columnId);
+        return ResponseEntity.noContent().build();
+    }
 }
